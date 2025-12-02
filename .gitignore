@@ -1,19 +1,8 @@
-# Ignore log files
-logging/logs/*.log
-
-# Ignore all JSON files in cache and subfolders
-cache/**/*.json
-cache/*.json
-
-# Ignore all .DS_Store files
+backend/cache/**/*.json
+backend/cache/*.json
+backend/logging/**/*.log
+backend/logging/logs/*.log
+backend/logging/logs/
 *.DS_Store
-cache/.DS_Store
-
-# Ignore all files in cache folder
-cache/
-
-# Ignore Python cache
 __pycache__/
-
-# Ignore Go build output
 *.out
