@@ -1,0 +1,725 @@
+{
+  "data": [
+    {
+      "game_id": "649",
+      "game_date": "2025-11-30",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 23
+          },
+          {
+            "numar": 18
+          },
+          {
+            "numar": 41
+          },
+          {
+            "numar": 8
+          },
+          {
+            "numar": 25
+          },
+          {
+            "numar": 45
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "9772810",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 773045.52
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 42946.97
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 467.66
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 43328.4
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 43328.4
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 14442.8
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 3332.95
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 528.39
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 14442.8
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 14442.8
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-27",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 33
+          },
+          {
+            "numar": 41
+          },
+          {
+            "numar": 28
+          },
+          {
+            "numar": 25
+          },
+          {
+            "numar": 2
+          },
+          {
+            "numar": 30
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "4803959",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 484970.4
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 20207.1
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 509.95
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 28152.24
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 28152.24
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 28152.24
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2346.02
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 574.53
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 9384.08
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 9384.08
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-23",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 12
+          },
+          {
+            "numar": 20
+          },
+          {
+            "numar": 11
+          },
+          {
+            "numar": 17
+          },
+          {
+            "numar": 26
+          },
+          {
+            "numar": 39
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "2713385",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 720501.36
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 14127.47
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 407.75
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 43272
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 170856.6
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 71777.52
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 3328.61
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 518.22
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 14424
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 14424
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-20",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 36
+          },
+          {
+            "numar": 47
+          },
+          {
+            "numar": 33
+          },
+          {
+            "numar": 39
+          },
+          {
+            "numar": 34
+          },
+          {
+            "numar": 3
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "1302899",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 515134.56
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 171711.52
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 766.56
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 28505.52
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 28505.52
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 28505.52
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2591.41
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 491.47
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 9501.84
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 9501.84
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-16",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 14
+          },
+          {
+            "numar": 44
+          },
+          {
+            "numar": 12
+          },
+          {
+            "numar": 39
+          },
+          {
+            "numar": 40
+          },
+          {
+            "numar": 9
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "1902746",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 764202.48
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 31841.77
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 665.1
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 41848.56
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 41848.56
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 13949.52
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2789.9
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 516.64
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 13949.52
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 13949.52
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-13",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 39
+          },
+          {
+            "numar": 7
+          },
+          {
+            "numar": 44
+          },
+          {
+            "numar": 9
+          },
+          {
+            "numar": 5
+          },
+          {
+            "numar": 43
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "3292071",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 455619.6
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 30374.64
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 829.9
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 27324.24
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 27324.24
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 13662.12
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2732.42
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 479.37
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 9108.08
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 9108.08
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-09",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 32
+          },
+          {
+            "numar": 19
+          },
+          {
+            "numar": 5
+          },
+          {
+            "numar": 10
+          },
+          {
+            "numar": 34
+          },
+          {
+            "numar": 23
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "6849526",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 49149676.24
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 16997.54
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 325.31
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 60352.8
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 60352.8
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 60352.8
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2235.28
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 580.31
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 20117.6
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 20117.6
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-06",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 42
+          },
+          {
+            "numar": 2
+          },
+          {
+            "numar": 20
+          },
+          {
+            "numar": 35
+          },
+          {
+            "numar": 22
+          },
+          {
+            "numar": 46
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "4106854",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 952121.76
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 35263.76
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 692.95
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 39893.28
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 39893.28
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 13297.76
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2099.64
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 554.07
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 13297.76
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 13297.76
+        }
+      ]
+    },
+    {
+      "game_id": "649",
+      "game_date": "2025-11-02",
+      "varianta": {
+        "id": 1,
+        "numere": [
+          {
+            "numar": 11
+          },
+          {
+            "numar": 6
+          },
+          {
+            "numar": 24
+          },
+          {
+            "numar": 46
+          },
+          {
+            "numar": 44
+          },
+          {
+            "numar": 43
+          }
+        ]
+      },
+      "noroc": {
+        "numar": "1396650",
+        "castigator": false
+      },
+      "nume_noroc": "NOROC",
+      "categorii_castig_varianta": [
+        {
+          "id_categorie": "I (6/6)",
+          "valoare_castig": 1396412.16
+        },
+        {
+          "id_categorie": "II (5/6)",
+          "valoare_castig": 24498.45
+        },
+        {
+          "id_categorie": "III (4/6)",
+          "valoare_castig": 677.54
+        },
+        {
+          "id_categorie": "IV (3/6)",
+          "valoare_castig": 50
+        }
+      ],
+      "categorii_castig_noroc": [
+        {
+          "id_categorie": "I",
+          "valoare_castig": 59954.16
+        },
+        {
+          "id_categorie": "II",
+          "valoare_castig": 59954.16
+        },
+        {
+          "id_categorie": "III",
+          "valoare_castig": 29977.08
+        },
+        {
+          "id_categorie": "IV",
+          "valoare_castig": 2997.7
+        },
+        {
+          "id_categorie": "V",
+          "valoare_castig": 576.48
+        },
+        {
+          "id_categorie": "N+3",
+          "valoare_castig": 19984.72
+        },
+        {
+          "id_categorie": "N-3",
+          "valoare_castig": 19984.72
+        }
+      ]
+    }
+  ],
+  "expires_at": "2025-12-05T18:11:28.48593+02:00"
+}
