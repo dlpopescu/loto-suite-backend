@@ -58,17 +58,16 @@ func NewServer() *Server {
 	s.mux.HandleFunc("POST /api/check", corsMiddleware(s.handleVerificareBilet))
 	s.mux.HandleFunc("POST /api/scan", corsMiddleware(s.handleScanareBilet))
 	s.mux.HandleFunc("GET /api/logs", corsMiddleware(s.handleDownloadLogs))
+	s.mux.HandleFunc("GET /api/health", corsMiddleware(s.handleHealthCheck))
 	// s.mux.HandleFunc("/api/log", corsMiddleware(s.handleLog))
 	// s.mux.HandleFunc("/api/clear-cache", corsMiddleware(s.handleClearCache))
-	s.mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("OK"))
-	})
 
 	return s
 }
 
 func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("CORS middleware for %s %s", r.Method, r.URL.Path)
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -231,6 +230,10 @@ func (s *Server) handleDownloadLogs(w http.ResponseWriter, r *http.Request) {
 	if _, err := io.Copy(w, file); err != nil {
 		log.Printf("failed to stream log file %s: %v", fileName, err)
 	}
+}
+
+func (s *Server) handleHealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
 }
 
 func respondWithJSON(w http.ResponseWriter, r *http.Request, data any) {
