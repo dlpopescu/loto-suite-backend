@@ -1,0 +1,59 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Change to your default branch if different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.2'
+
+      - name: Build backend
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o loto_backend main.go
+
+      - name: Deploy to EC2
+        env:
+          EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_IP: ${{ secrets.EC2_IP }}
+        run: |
+          # Setup SSH
+          mkdir -p ~/.ssh
+          echo "$EC2_KEY" > ~/.ssh/ec2_key
+          chmod 600 ~/.ssh/ec2_key
+          ssh-keyscan -H $EC2_IP >> ~/.ssh/known_hosts
+          
+          # Upload binary
+          ssh -i ~/.ssh/ec2_key $EC2_USER@$EC2_IP "rm -f ~/loto_backend"
+          scp -i ~/.ssh/ec2_key loto_backend $EC2_USER@$EC2_IP:~/loto_backend
+          ssh -i ~/.ssh/ec2_key $EC2_USER@$EC2_IP "chmod +x ~/loto_backend"
+          
+          # Upload and setup service file
+          scp -i ~/.ssh/ec2_key ec2-services/loto_backend.service $EC2_USER@$EC2_IP:/tmp/loto_backend.service
+          ssh -i ~/.ssh/ec2_key $EC2_USER@$EC2_IP "\
+            sudo mv /tmp/loto_backend.service /etc/systemd/system/loto_backend.service && \
+            sudo systemctl daemon-reload && \
+            sudo systemctl enable loto_backend && \
+            sudo systemctl stop loto_backend && \
+            sudo systemctl start loto_backend"
+          
+          echo "✅ Deployment complete!"
+
+      - name: Verify deployment
+        env:
+          EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_IP: ${{ secrets.EC2_IP }}
+        run: |
+          ssh -i ~/.ssh/ec2_key $EC2_USER@$EC2_IP "sudo systemctl status loto_backend --no-pager"
