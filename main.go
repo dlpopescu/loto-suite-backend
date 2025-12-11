@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"loto-suite/backend/generics"
@@ -11,22 +13,32 @@ import (
 	"loto-suite/backend/models"
 	"loto-suite/backend/utils"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type Server struct {
 	mux *http.ServeMux
 }
 
+type contextKey string
+
+const traceIDKey contextKey = "traceID"
+
 func main() {
 	srv := NewServer()
 
-	log.Println("Starting HTTPS server on :443...")
+	port := os.Getenv("HTTPS_PORT")
+	log.Printf("Starting HTTPS server on %s...", port)
 	err := http.ListenAndServeTLS(
-		":443",
-		"/etc/letsencrypt/live/dlpopescu.ro/fullchain.pem",
-		"/etc/letsencrypt/live/dlpopescu.ro/privkey.pem",
+		fmt.Sprintf(":%s", port),
+		os.Getenv("TLS_CERT_FILE"),
+		os.Getenv("TLS_KEY_FILE"),
 		srv.mux,
 	)
 
@@ -45,6 +57,7 @@ func NewServer() *Server {
 	s.mux.HandleFunc("/api/draw-results", corsMiddleware(s.handleGetDrawResults))
 	s.mux.HandleFunc("/api/check", corsMiddleware(s.handleVerificareBilet))
 	s.mux.HandleFunc("/api/scan", corsMiddleware(s.handleScanareBilet))
+	s.mux.HandleFunc("/api/logs", corsMiddleware(s.handleDownloadLogs))
 	// s.mux.HandleFunc("/api/log", corsMiddleware(s.handleLog))
 	// s.mux.HandleFunc("/api/clear-cache", corsMiddleware(s.handleClearCache))
 	s.mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -65,13 +78,25 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		next(w, r)
+		traceMiddleware(next)(w, r)
+	}
+}
+
+func traceMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		traceID := uuid.New().String()
+		ctx := context.WithValue(r.Context(), traceIDKey, traceID)
+		w.Header().Set("X-Trace-ID", traceID)
+
+		logging.Info("be", fmt.Sprintf("[TraceID: %s] %s request to %s", traceID, r.Method, r.URL.String()))
+
+		next(w, r.WithContext(ctx))
 	}
 }
 
 func (s *Server) handleGetGames(w http.ResponseWriter, r *http.Request) {
 	games := models.Games
-	respondWithJSON(w, games)
+	respondWithJSON(w, r, games)
 }
 
 func (s *Server) handleGetDrawDates(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +109,7 @@ func (s *Server) handleGetDrawDates(w http.ResponseWriter, r *http.Request) {
 	}
 
 	dates := utils.GetDrawDates(daysBack)
-	respondWithJSON(w, dates)
+	respondWithJSON(w, r, dates)
 }
 
 func (s *Server) handleGetDrawResults(w http.ResponseWriter, r *http.Request) {
@@ -92,13 +117,13 @@ func (s *Server) handleGetDrawResults(w http.ResponseWriter, r *http.Request) {
 	queryDateStr := strings.TrimSpace(r.URL.Query().Get("date"))
 
 	if queryGameId == "" || queryDateStr == "" {
-		respondWithError(w, "missing game or date parameter", http.StatusBadRequest, "fe")
+		respondWithError(w, r, "missing game or date parameter", http.StatusBadRequest, "fe")
 		return
 	}
 
 	queryDate, err := generics.TryParseDate(queryDateStr)
 	if err != nil {
-		respondWithError(w, "invalid date format", http.StatusBadRequest, "fe")
+		respondWithError(w, r, "invalid date format", http.StatusBadRequest, "fe")
 		return
 	}
 
@@ -111,13 +136,13 @@ func (s *Server) handleGetDrawResults(w http.ResponseWriter, r *http.Request) {
 
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil && err != io.EOF {
-		respondWithError(w, "invalid request body", http.StatusBadRequest, "fe")
+		respondWithError(w, r, "invalid request body", http.StatusBadRequest, "fe")
 		return
 	}
 
 	drawResults, err := utils.GetDrawResults(queryGameId, month, year, body.UseCache)
 	if err != nil {
-		respondWithError(w, err.Error(), http.StatusInternalServerError, "be")
+		respondWithError(w, r, err.Error(), http.StatusInternalServerError, "be")
 		return
 	}
 
@@ -127,38 +152,40 @@ func (s *Server) handleGetDrawResults(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if result.GameId != "" {
-		respondWithJSON(w, result)
+		respondWithJSON(w, r, result)
 		return
 	}
 
-	respondWithError(w, "nu am gasit rezultate pentru data selectata", http.StatusNotFound, "fe")
+	respondWithError(w, r, "nu am gasit rezultate pentru data selectata", http.StatusNotFound, "fe")
 }
 
 func (s *Server) handleVerificareBilet(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		respondWithError(w, "method not allowed", http.StatusMethodNotAllowed, "fe")
+		respondWithError(w, r, "method not allowed", http.StatusMethodNotAllowed, "fe")
 		return
 	}
 
 	req := models.CheckRequest{}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, "invalid request body", http.StatusBadRequest, "fe")
+		respondWithError(w, r, "invalid request body", http.StatusBadRequest, "fe")
 		return
 	}
+
+	// logging.Info("BE", fmt.Sprintf("%s payload: %s", r.Method, generics.SerializeIgnoreError(req)))
 
 	result, err := utils.CheckTicket(req)
 	if err != nil {
-		respondWithError(w, err.Error(), http.StatusInternalServerError, "be")
+		respondWithError(w, r, err.Error(), http.StatusInternalServerError, "be")
 		return
 	}
 
-	respondWithJSON(w, result)
+	respondWithJSON(w, r, result)
 }
 
 func (s *Server) handleScanareBilet(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		respondWithError(w, "method not allowed", http.StatusMethodNotAllowed, "fe")
+		respondWithError(w, r, "method not allowed", http.StatusMethodNotAllowed, "fe")
 		return
 	}
 
@@ -168,86 +195,95 @@ func (s *Server) handleScanareBilet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, "invalid request body", http.StatusBadRequest, "fe")
+		respondWithError(w, r, "invalid request body", http.StatusBadRequest, "fe")
 		return
 	}
 
 	imageData, err := base64.StdEncoding.DecodeString(req.ImageData)
 	if err != nil {
-		respondWithError(w, "invalid base64 image data", http.StatusBadRequest, "fe")
+		respondWithError(w, r, "invalid base64 image data", http.StatusBadRequest, "fe")
 		return
 	}
 
 	result, err := utils.ScanareBilet(req.GameId, imageData)
 	if err != nil {
-		respondWithError(w, err.Error(), http.StatusInternalServerError, "be")
+		respondWithError(w, r, err.Error(), http.StatusInternalServerError, "be")
 		return
 	}
 
-	respondWithJSON(w, result)
+	respondWithJSON(w, r, result)
 }
 
-// func (s *Server) handleLog(w http.ResponseWriter, r *http.Request) {
-// 	if r.Method != http.MethodPost {
-// 		logging.ErrorFe("na", fmt.Sprintf("method not allowed %s", r.Method))
-// 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-// 		return
-// 	}
+func (s *Server) handleDownloadLogs(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		respondWithError(w, r, "method not allowed", http.StatusMethodNotAllowed, "be")
+		return
+	}
 
-// 	var logReq struct {
-// 		Level      string `json:"level"`
-// 		Message    string `json:"message"`
-// 		CallerInfo string `json:"caller_info"`
-// 		StackTrace string `json:"stack_trace"`
-// 	}
+	queryDateStr := strings.TrimSpace(r.URL.Query().Get("date"))
+	if queryDateStr == "" {
+		queryDateStr = time.Now().Format(generics.GoDateFormat)
+	}
 
-// 	if err := json.NewDecoder(r.Body).Decode(&logReq); err != nil {
-// 		respondWithError(w, fmt.Sprintf("invalid body: %s", err.Error()), http.StatusBadRequest, "fe")
-// 		return
-// 	}
+	queryDate, err := generics.TryParseDate(queryDateStr)
+	if err != nil {
+		respondWithError(w, r, fmt.Sprintf("invalid date format: %s", queryDateStr), http.StatusBadRequest, "fe")
+		return
+	}
 
-// 	// Route to appropriate logging function based on level
-// 	level := strings.ToLower(logReq.Level)
-// 	switch level {
-// 	case "debug":
-// 		logging.DebugFe(logReq.CallerInfo, logReq.Message)
-// 	case "info":
-// 		logging.InfoFe(logReq.CallerInfo, logReq.Message)
-// 	case "warn":
-// 		logging.WarnFe(logReq.CallerInfo, logReq.Message)
-// 	case "error":
-// 		logging.ErrorFe(logReq.CallerInfo, logReq.Message)
-// 	case "fatal":
-// 		logging.FatalFe(logReq.CallerInfo, logReq.Message, logReq.StackTrace)
-// 	default:
-// 		logging.InfoFe(logReq.CallerInfo, logReq.Message)
-// 	}
+	fileName := fmt.Sprintf("be_%s.log", queryDate.Format(generics.GoDateFormat))
+	filePath := filepath.Join(logging.GetLogDir(), fileName)
 
-// 	w.WriteHeader(http.StatusOK)
-// }
+	file, err := os.Open(filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			respondWithError(w, r, "log file not found", http.StatusNotFound, "be")
+		} else {
+			respondWithError(w, r, "failed to open log file", http.StatusInternalServerError, "be")
+		}
 
-// func (s *Server) handleClearCache(w http.ResponseWriter, r *http.Request) {
-// 	if r.Method != http.MethodPost {
-// 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-// 		return
-// 	}
+		return
+	}
 
-// 	cache.ClearCache()
+	defer file.Close()
 
-// 	w.WriteHeader(http.StatusOK)
-// }
+	traceID, _ := r.Context().Value(traceIDKey).(string)
+	logging.Info("be", fmt.Sprintf("[TraceID: %s] Success response", traceID))
 
-func respondWithJSON(w http.ResponseWriter, data any) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+
+	if _, err := io.Copy(w, file); err != nil {
+		log.Printf("failed to stream log file %s: %v", fileName, err)
+	}
+}
+
+func respondWithJSON(w http.ResponseWriter, r *http.Request, data any) {
+	traceID, _ := r.Context().Value(traceIDKey).(string)
+	logging.Info("be", fmt.Sprintf("[TraceID: %s] Success response", traceID))
+
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	encoder.SetIndent("", "  ")
-	encoder.Encode(data)
+
+	response := map[string]any{
+		"data":     data,
+		"trace_id": traceID,
+	}
+
+	encoder.Encode(response)
 }
 
-func respondWithError(w http.ResponseWriter, message string, status int, source string) {
-	logging.Error(source, errors.New(message), "")
+func respondWithError(w http.ResponseWriter, r *http.Request, message string, status int, source string) {
+	traceID, _ := r.Context().Value(traceIDKey).(string)
+	logMsg := fmt.Sprintf("[TraceID: %s] %s", traceID, message)
+
+	logging.Error(source, errors.New(logMsg), "")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(map[string]string{"error": message})
+	json.NewEncoder(w).Encode(map[string]string{
+		"error":    message,
+		"trace_id": traceID,
+	})
 }

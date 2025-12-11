@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"loto-suite/backend/generics"
 	"loto-suite/backend/logging"
@@ -38,17 +37,17 @@ func doHttpRequest(ctx context.Context, method string, url string, customHeaders
 		req.Header.Set(key, value)
 	}
 
-	logData := map[string]any{
-		"method":  method,
-		"url":     url,
-		"headers": req.Header,
-		"body":    bodyEncoded,
-	}
+	// logData := map[string]any{
+	// 	"method":  method,
+	// 	"url":     url,
+	// 	"headers": req.Header,
+	// 	"body":    bodyEncoded,
+	// }
 
-	logJson, err := json.Marshal(logData)
-	if err == nil {
-		logging.Debug("BE", fmt.Sprintf("HTTP Request: %s", string(logJson)))
-	}
+	// logJson, err := json.Marshal(logData)
+	// if err == nil {
+	// 	logs.Info("BE", fmt.Sprintf("HTTP Request: %s", string(logJson)))
+	// }
 
 	resp, err := httpClient.Do(req)
 	if err != nil {

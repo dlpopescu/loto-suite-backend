@@ -12,7 +12,10 @@ type DrawResult struct {
 	VariantSpecial              *Variant      `json:"varianta_speciala,omitempty"`
 	LuckyNumber                 *LuckyNumber  `json:"noroc"`
 	LuckyNumberName             string        `json:"nume_noroc"`
-	WinCategoriesVariantRegular []WinCategory `json:"categorii_castig_varianta,omitempty"`
-	WinCategoriesVariantSpecial []WinCategory `json:"categorii_castig_varianta_speciala,omitempty"`
-	WinCategoriesLuckyNumber    []WinCategory `json:"categorii_castig_noroc,omitempty"`
+	WinCategoriesVariantRegular []WinCategory `json:"-"`
+	WinCategoriesVariantSpecial []WinCategory `json:"-"`
+	WinCategoriesLuckyNumber    []WinCategory `json:"-"`
+	// WinCategoriesVariantRegular []WinCategory `json:"categorii_castig_varianta,omitempty"`
+	// WinCategoriesVariantSpecial []WinCategory `json:"categorii_castig_varianta_speciala,omitempty"`
+	// WinCategoriesLuckyNumber    []WinCategory `json:"categorii_castig_noroc,omitempty"`
 }

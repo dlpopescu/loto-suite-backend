@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"loto-suite/backend/generics"
-	"loto-suite/backend/logging"
 	"loto-suite/backend/models"
 	"strconv"
 	"strings"
@@ -21,8 +20,6 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 
 	month := strconv.Itoa(int(requestDate.Month()))
 	year := strconv.Itoa(requestDate.Year())
-
-	logging.Info("BE", fmt.Sprintf("Checking %s", generics.SerializeIgnoreError(request)))
 
 	request.GameId = strings.ToLower(strings.TrimSpace(request.GameId))
 	drawResults, err := GetDrawResults(request.GameId, month, year, request.UseCache)

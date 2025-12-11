@@ -1,5 +1,7 @@
 backend/cache/storage/
 backend/logging/logs/
+backend/log/logs/
+backend/logs/
 *.DS_Store
 __pycache__/
 *.out
@@ -7,6 +9,12 @@ __pycache__/
 # Go binaries
 /app
 /redirect
+/loto_backend
+/loto_be
+/loto_redirect
+/loto_be_redir
+/http_redirect
+/http_to_https
 
 # Miscellaneous
 *.class
@@ -33,24 +41,3 @@ migrate_working_dir/
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
 #.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-build/
-/coverage/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release

@@ -3,13 +3,16 @@ Description=loto-backend Service
 After=network.target
 
 [Service]
-ExecStart=/home/ubuntu/app
+ExecStart=/home/ubuntu/loto_backend
 Restart=always
 RestartSec=5
 User=root
 WorkingDirectory=/home/ubuntu
 StandardOutput=journal
 StandardError=journal
+Environment="HTTPS_PORT=443"
+Environment="TLS_CERT_FILE=/etc/letsencrypt/live/dlpopescu.ro/fullchain.pem"
+Environment="TLS_KEY_FILE=/etc/letsencrypt/live/dlpopescu.ro/privkey.pem"
 
 [Install]
 WantedBy=multi-user.target

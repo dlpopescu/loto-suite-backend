@@ -1,0 +1,30 @@
+include .env.mk
+
+.PHONY: cleanup-services
+cleanup-services:
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "mkdir -p ~/$(OBSOLETE_DEFINITIONS_DIR_REMOTE)"
+	@scp -i $(EC2_KEY) $(OBSOLETE_DEFINITIONS_DIR_LOCAL)/services $(EC2_USER)@$(EC2_IP):~/$(OBSOLETE_DEFINITIONS_DIR_REMOTE)/
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
+		cat ~/$(OBSOLETE_DEFINITIONS_DIR_REMOTE)/services | \
+		while read service; do \
+			[ -z \"\$$service\" ] && continue; \
+			echo \"Stopping \$$service...\"; \
+			sudo systemctl stop \$$service 2>/dev/null || true; \
+			sudo systemctl disable \$$service 2>/dev/null || true; \
+			sudo rm -f /etc/systemd/system/\$$service.service; \
+		done; \
+		sudo systemctl daemon-reload; \
+		echo \"Services cleanup complete\""
+
+.PHONY: cleanup-binaries
+cleanup-binaries:
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "mkdir -p ~/$(OBSOLETE_DEFINITIONS_DIR_REMOTE)"
+	@scp -i $(EC2_KEY) $(OBSOLETE_DEFINITIONS_DIR_LOCAL)/binaries $(EC2_USER)@$(EC2_IP):~/$(OBSOLETE_DEFINITIONS_DIR_REMOTE)/
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
+		cat ~/$(OBSOLETE_DEFINITIONS_DIR_REMOTE)/binaries | \
+		while read binary; do \
+			[ -z \"\$$binary\" ] && continue; \
+			echo \"Killing \$$binary...\"; \
+			sudo killall -9 \$$binary 2>/dev/null || true; \
+		done; \
+		echo \"Binaries cleanup complete\""

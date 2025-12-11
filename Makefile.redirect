@@ -6,31 +6,31 @@ build-redirect:
 
 .PHONY: upload-redirect
 upload-redirect:
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "rm -f ~/$(REDIRECT_BINARY_NAME)"
-	scp -i $(EC2_KEY) $(REDIRECT_BINARY_NAME) $(EC2_USER)@$(EC2_IP):~/$(REDIRECT_BINARY_NAME)
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "chmod +x ~/$(REDIRECT_BINARY_NAME)"
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "rm -f ~/$(REDIRECT_BINARY_NAME)"
+	@scp -i $(EC2_KEY) $(REDIRECT_BINARY_NAME) $(EC2_USER)@$(EC2_IP):~/$(REDIRECT_BINARY_NAME)
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "chmod +x ~/$(REDIRECT_BINARY_NAME)"
 
 .PHONY: create-service-redirect
 create-service-redirect:
-	scp -i $(EC2_KEY) $(REDIRECT_SERVICE_FILE_PATH) $(EC2_USER)@$(EC2_IP):/tmp/$(REDIRECT_SERVICE_FILE)
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
+	@scp -i $(EC2_KEY) $(REDIRECT_SERVICE_FILE_PATH) $(EC2_USER)@$(EC2_IP):/tmp/$(REDIRECT_SERVICE_FILE)
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
 		sudo mv /tmp/$(REDIRECT_SERVICE_FILE) /etc/systemd/system/$(REDIRECT_SERVICE_NAME).service; \
 		sudo systemctl daemon-reload; \
 		sudo systemctl enable $(REDIRECT_SERVICE_NAME)"
 
+.PHONY: stop-redirect
+stop-redirect:
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "sudo systemctl stop $(REDIRECT_SERVICE_NAME)"
+
 .PHONY: restart-redirect
 restart-redirect:
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "sudo systemctl restart $(REDIRECT_SERVICE_NAME)"
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
+		sudo systemctl stop $(REDIRECT_SERVICE_NAME); \
+		sudo systemctl start $(REDIRECT_SERVICE_NAME)"
 
-.PHONY: logs-redirect
-logs-redirect:
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "journalctl -u $(REDIRECT_SERVICE_NAME) -f"
-
-# Deploy redirect only: build, upload, restart
 .PHONY: deploy-redirect
-deploy-redirect: build-redirect upload-redirect restart-redirect
-
-# Deploy redirect only: build, upload, restart
-.PHONY: deploy-redirect-full
-deploy-redirect: build-redirect upload-redirect create-service-redirect restart-redirect
+deploy-redirect: build-redirect \
+	upload-redirect \
+	create-service-redirect \
+	restart-redirect
 	@echo "Redirect deployment complete!"

@@ -3,7 +3,7 @@ Description=HTTP → HTTPS Redirect
 After=network.target
 
 [Service]
-ExecStart=/home/ubuntu/redirect
+ExecStart=/home/ubuntu/http_redirect
 WorkingDirectory=/home/ubuntu
 Restart=always
 User=root

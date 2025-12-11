@@ -16,5 +16,5 @@ type CheckResult struct {
 	WinsCumulatedVariantRegular []WinCumulated `json:"castiguri_varianta,omitempty"`
 	WinsCumulatedVariantSpecial []WinCumulated `json:"castiguri_varianta_speciala,omitempty"`
 	WinsCumulatedLuckyNumber    []WinCumulated `json:"castiguri_noroc,omitempty"`
-	WinsTotal                   float64        `json:"valoare_totala_castig"`
+	WinsTotal                   float64        `json:"castiguri_total"`
 }

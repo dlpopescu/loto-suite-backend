@@ -27,19 +27,19 @@ type Logger struct {
 }
 
 func (l *Logger) debug(source string, message string) {
-	l.write(source, LogTypeDebug, message, "", "NA")
+	l.write(source, LogTypeDebug, message, "", "")
 }
 
 func (l *Logger) info(source string, message string) {
-	l.write(source, LogTypeInfo, message, "", "NA")
+	l.write(source, LogTypeInfo, message, "", "")
 }
 
 func (l *Logger) warn(source string, message string) {
-	l.write(source, LogTypeWarn, message, "", "NA")
+	l.write(source, LogTypeWarn, message, "", "")
 }
 
 func (l *Logger) error(source string, message string, callerInfo string) {
-	l.write(source, LogTypeError, message, callerInfo, "NA")
+	l.write(source, LogTypeError, message, callerInfo, "")
 }
 
 func (l *Logger) write(source string, logType LogType, message string, callerInfo string, stackTrace string) {
@@ -47,7 +47,7 @@ func (l *Logger) write(source string, logType LogType, message string, callerInf
 	defer l.mutex.Unlock()
 
 	date := time.Now().Format(generics.GoDateFormat)
-	logFileName := fmt.Sprintf("app_%s.log", date)
+	logFileName := fmt.Sprintf("be_%s.log", date)
 	logFilePath := filepath.Join(l.dir, logFileName)
 
 	timestamp := time.Now().Format(fmt.Sprintf("%s %s", generics.GoDateFormat, generics.GoTimeFormat))

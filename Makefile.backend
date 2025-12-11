@@ -6,27 +6,31 @@ build-backend:
 
 .PHONY: upload-backend
 upload-backend:
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "rm -f ~/$(SERVICE_BINARY_NAME)"
-	scp -i $(EC2_KEY) $(SERVICE_BINARY_NAME) $(EC2_USER)@$(EC2_IP):~/$(SERVICE_BINARY_NAME)
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "chmod +x ~/$(SERVICE_BINARY_NAME)"
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "rm -f ~/$(SERVICE_BINARY_NAME)"
+	@scp -i $(EC2_KEY) $(SERVICE_BINARY_NAME) $(EC2_USER)@$(EC2_IP):~/$(SERVICE_BINARY_NAME)
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "chmod +x ~/$(SERVICE_BINARY_NAME)"
 
 .PHONY: create-service-backend
 create-service-backend:
-	scp -i $(EC2_KEY) $(SERVICE_FILE_PATH) $(EC2_USER)@$(EC2_IP):/tmp/$(SERVICE_FILE)
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
+	@scp -i $(EC2_KEY) $(SERVICE_FILE_PATH) $(EC2_USER)@$(EC2_IP):/tmp/$(SERVICE_FILE)
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
 		sudo mv /tmp/$(SERVICE_FILE) /etc/systemd/system/$(SERVICE_NAME).service; \
 		sudo systemctl daemon-reload; \
 		sudo systemctl enable $(SERVICE_NAME)"
 
 .PHONY: restart-backend
 restart-backend:
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "sudo systemctl restart $(SERVICE_NAME)"
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "\
+		sudo systemctl stop $(SERVICE_NAME); \
+		sudo systemctl start $(SERVICE_NAME)"
 
-.PHONY: logs-backend
-logs-backend:
-	ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "journalctl -u $(SERVICE_NAME) -f"
+.PHONY: stop-backend
+stop-backend:
+	@ssh -i $(EC2_KEY) $(EC2_USER)@$(EC2_IP) "sudo systemctl stop $(SERVICE_NAME)"
 
-# Deploy backend only: build, upload, restart
 .PHONY: deploy-backend
-deploy-backend: build-backend upload-backend create-service-backend restart-backend
+deploy-backend: build-backend \
+	upload-backend \
+	create-service-backend \
+	restart-backend
 	@echo "Backend deployment complete!"

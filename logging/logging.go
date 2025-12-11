@@ -27,14 +27,7 @@ var loggerOnce sync.Once
 
 func getLogger() *Logger {
 	loggerOnce.Do(func() {
-		_, filename, _, ok := runtime.Caller(0)
-		if ok {
-			loggingDir := filepath.Dir(filename)
-			logger = &Logger{dir: filepath.Join(loggingDir, "logs")}
-		} else {
-			logger = &Logger{dir: filepath.Join("logging", "logs")}
-		}
-
+		logger = &Logger{dir: filepath.Join(".", "logs")}
 		os.MkdirAll(logger.dir, 0755)
 	})
 
@@ -94,4 +87,8 @@ func getCallerInfoEx() string {
 	}
 
 	return ""
+}
+
+func GetLogDir() string {
+	return getLogger().dir
 }

@@ -3,7 +3,7 @@ package models
 type Win struct {
 	Id          string `json:"id"`
 	Description string `json:"descriere"`
-	IsWinner    bool   `json:"castigator"`
+	IsWinner    bool   `json:"castigator,omitempty"`
 }
 
 type WinCumulated struct {

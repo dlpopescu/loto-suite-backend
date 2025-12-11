@@ -2,7 +2,7 @@ package models
 
 type LuckyNumber struct {
 	Value    string `json:"numar"`
-	IsWinner bool   `json:"castigator"`
+	IsWinner bool   `json:"castigator,omitempty"`
 	Wins     []Win  `json:"-"`
 	// Wins     []Win  `json:"castiguri,omitempty"`
 }
@@ -18,5 +18,5 @@ type Variant struct {
 
 type Number struct {
 	Value    int  `json:"numar"`
-	IsWinner bool `json:"castigator"`
+	IsWinner bool `json:"castigator,omitempty"`
 }
