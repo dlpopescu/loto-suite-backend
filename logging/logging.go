@@ -27,7 +27,7 @@ var loggerOnce sync.Once
 
 func getLogger() *Logger {
 	loggerOnce.Do(func() {
-		logger = &Logger{dir: filepath.Join(".", "logs")}
+		logger = &Logger{dir: "/var/log/loto-backend"}
 		os.MkdirAll(logger.dir, 0755)
 	})
 
