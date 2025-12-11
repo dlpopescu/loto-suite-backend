@@ -140,8 +140,8 @@ func extractCategoriiCastigVariante(div *goquery.Selection) []models.WinCategory
 			valoare, err := strToEnglishFloat(valoareStr)
 			if err == nil {
 				categoriiCastig = append(categoriiCastig, models.WinCategory{
-					Id:    strings.TrimSpace(tds.Eq(0).Text()),
-					Value: valoare,
+					Id:     strings.TrimSpace(tds.Eq(0).Text()),
+					Amount: valoare,
 				})
 			}
 		}
@@ -193,8 +193,8 @@ func extractCategoriiCastigNoroc(div *goquery.Selection, gameId string) []models
 		valoare, err := strToEnglishFloat(valoareStr)
 		if err == nil {
 			categoriiCastig = append(categoriiCastig, models.WinCategory{
-				Id:    strings.TrimSpace(tds.Eq(0).Text()),
-				Value: valoare,
+				Id:     strings.TrimSpace(tds.Eq(0).Text()),
+				Amount: valoare,
 			})
 		}
 	})

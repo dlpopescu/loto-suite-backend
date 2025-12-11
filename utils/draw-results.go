@@ -8,17 +8,15 @@ import (
 	"time"
 )
 
-func GetDrawResults(gameId string, month string, year string, useCache bool) ([]models.DrawResult, error) {
+func GetDrawResults(gameId string, month string, year string) ([]models.DrawResult, error) {
 	if gameId == "" {
 		return nil, fmt.Errorf("game ID is required")
 	}
 
-	if useCache {
-		if cachedData, found := cache.Get(gameId, month, year); found {
-			var results []models.DrawResult
-			if err := json.Unmarshal(cachedData, &results); err == nil {
-				return results, nil
-			}
+	if cachedData, found := cache.Get(gameId, month, year); found {
+		var results []models.DrawResult
+		if err := json.Unmarshal(cachedData, &results); err == nil {
+			return results, nil
 		}
 	}
 

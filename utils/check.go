@@ -22,7 +22,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 	year := strconv.Itoa(requestDate.Year())
 
 	request.GameId = strings.ToLower(strings.TrimSpace(request.GameId))
-	drawResults, err := GetDrawResults(request.GameId, month, year, request.UseCache)
+	drawResults, err := GetDrawResults(request.GameId, month, year)
 
 	if err != nil {
 		fmt.Println(err)
@@ -77,7 +77,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 						Id:          castig.Id,
 						Description: castig.Description,
 						WinCount:    generics.Btoi(castig.IsWinner),
-						Value:       0,
+						Amount:      0,
 					}
 
 					valoareCastig, found := generics.FindFirst(
@@ -87,7 +87,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 						})
 
 					if found {
-						castigCumulat.Value = valoareCastig.Value
+						castigCumulat.Amount = valoareCastig.Amount
 					}
 
 					checkResult.WinsCumulatedVariantRegular = append(checkResult.WinsCumulatedVariantRegular, castigCumulat)
@@ -110,7 +110,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 						Id:          castig.Id,
 						Description: castig.Description,
 						WinCount:    generics.Btoi(castig.IsWinner),
-						Value:       0,
+						Amount:      0,
 					}
 
 					valoareCastig, found := generics.FindFirst(
@@ -120,7 +120,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 						})
 
 					if found {
-						castigCumulat.Value = valoareCastig.Value
+						castigCumulat.Amount = valoareCastig.Amount
 					}
 
 					checkResult.WinsCumulatedVariantSpecial = append(checkResult.WinsCumulatedVariantSpecial, castigCumulat)
@@ -132,11 +132,11 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 	}
 
 	for _, castigVarianta := range checkResult.WinsCumulatedVariantRegular {
-		checkResult.WinsTotal += float64(castigVarianta.WinCount) * castigVarianta.Value
+		checkResult.WinsTotal += float64(castigVarianta.WinCount) * castigVarianta.Amount
 	}
 
 	for _, castigVarianta := range checkResult.WinsCumulatedVariantSpecial {
-		checkResult.WinsTotal += float64(castigVarianta.WinCount) * castigVarianta.Value
+		checkResult.WinsTotal += float64(castigVarianta.WinCount) * castigVarianta.Amount
 	}
 
 	checkResult.WinsCumulatedLuckyNumber = []models.WinCumulated{}
@@ -153,7 +153,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 					Id:          castig.Id,
 					Description: castig.Description,
 					WinCount:    generics.Btoi(castig.IsWinner),
-					Value:       0,
+					Amount:      0,
 				}
 
 				valoareCastig, found := generics.FindFirst(
@@ -163,7 +163,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 					})
 
 				if found {
-					castigCumulat.Value = valoareCastig.Value
+					castigCumulat.Amount = valoareCastig.Amount
 				}
 
 				checkResult.WinsCumulatedLuckyNumber = append(checkResult.WinsCumulatedLuckyNumber, castigCumulat)
@@ -174,7 +174,7 @@ func CheckTicket(request models.CheckRequest) (*models.CheckResult, error) {
 	}
 
 	for _, castigNoroc := range checkResult.WinsCumulatedLuckyNumber {
-		checkResult.WinsTotal += float64(castigNoroc.WinCount) * castigNoroc.Value
+		checkResult.WinsTotal += float64(castigNoroc.WinCount) * castigNoroc.Amount
 	}
 
 	checkResult.IsCastigator = checkResult.WinsTotal > 0

@@ -52,13 +52,13 @@ func NewServer() *Server {
 		mux: http.NewServeMux(),
 	}
 
-	s.mux.HandleFunc("GET /api/games", corsMiddleware(s.handleGetGames))
-	s.mux.HandleFunc("GET /api/draw-dates", corsMiddleware(s.handleGetDrawDates))
-	s.mux.HandleFunc("GET /api/draw-results", corsMiddleware(s.handleGetDrawResults))
-	s.mux.HandleFunc("POST /api/check", corsMiddleware(s.handleVerificareBilet))
-	s.mux.HandleFunc("POST /api/scan", corsMiddleware(s.handleScanareBilet))
-	s.mux.HandleFunc("GET /api/logs", corsMiddleware(s.handleDownloadLogs))
-	s.mux.HandleFunc("GET /api/health", corsMiddleware(s.handleHealthCheck))
+	s.mux.HandleFunc("/api/games", corsMiddleware(s.handleGetGames))
+	s.mux.HandleFunc("/api/draw-dates", corsMiddleware(s.handleGetDrawDates))
+	s.mux.HandleFunc("/api/draw-results", corsMiddleware(s.handleGetDrawResults))
+	s.mux.HandleFunc("/api/check", corsMiddleware(s.handleVerificareBilet))
+	s.mux.HandleFunc("/api/scan", corsMiddleware(s.handleScanareBilet))
+	s.mux.HandleFunc("/api/logs", corsMiddleware(s.handleDownloadLogs))
+	s.mux.HandleFunc("/api/health", corsMiddleware(s.handleHealthCheck))
 	// s.mux.HandleFunc("/api/log", corsMiddleware(s.handleLog))
 	// s.mux.HandleFunc("/api/clear-cache", corsMiddleware(s.handleClearCache))
 
@@ -115,11 +115,6 @@ func (s *Server) handleGetDrawResults(w http.ResponseWriter, r *http.Request) {
 	queryGameId := strings.TrimSpace(r.URL.Query().Get("game"))
 	queryDateStr := strings.TrimSpace(r.URL.Query().Get("date"))
 
-	useCache := false
-	if r.URL.Query().Has("use_cache") {
-		useCache = true
-	}
-
 	if queryGameId == "" || queryDateStr == "" {
 		respondWithError(w, r, "missing game or date parameter", http.StatusBadRequest, "fe")
 		return
@@ -134,7 +129,7 @@ func (s *Server) handleGetDrawResults(w http.ResponseWriter, r *http.Request) {
 	month := strconv.Itoa(int(queryDate.Month()))
 	year := strconv.Itoa(queryDate.Year())
 
-	drawResults, err := utils.GetDrawResults(queryGameId, month, year, useCache)
+	drawResults, err := utils.GetDrawResults(queryGameId, month, year)
 	if err != nil {
 		respondWithError(w, r, err.Error(), http.StatusInternalServerError, "be")
 		return

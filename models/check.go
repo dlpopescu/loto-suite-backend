@@ -4,7 +4,6 @@ type CheckRequest struct {
 	GameId      string    `json:"game_id"`
 	LuckyNumber string    `json:"noroc,omitempty"`
 	Date        string    `json:"date"`
-	UseCache    bool      `json:"use_cache"`
 	Variants    []Variant `json:"variante"`
 }
 
